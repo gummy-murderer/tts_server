@@ -11,6 +11,7 @@ tts = TTS(model_path="tts_models--multilingual--multi-dataset--xtts_v2", config_
 
 base_file_name = "voice_hg.wav"
 base_file_path = os.path.join("static", "voice_datas", base_file_name)
+os.makedirs(os.path.join("static", "temp"), exist_ok=True)
 
 def define_text_to_speech(text: str) -> str:
     print("TTS start")

@@ -7,7 +7,6 @@ import os
 
 app = FastAPI()
 
-
 class Item(BaseModel):
     contents: str
 
