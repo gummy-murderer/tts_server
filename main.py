@@ -1,22 +1,37 @@
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from melo.api import TTS
+from datetime import datetime
 import os
 
-# from tts import define_text_to_speech
+from lib.preprcessing import preprocess_text
+from lib.const import LANGUAGE, SPEAKER
 
 app = FastAPI()
 
-class Item(BaseModel):
-    contents: str
+model = TTS(language=LANGUAGE, 
+            device='cpu',
+            # config_path="./MeloTTS_kr/config.json"
+            )
+speaker_ids = model.hps.data.spk2id
 
-@app.post("/v1/api/tts")
-def read_item(item: Item):
-    # result_file_name = define_text_to_speech(item.contents)
-    result_file_name = "20240416_192029.wav"
-    return {"file_name": result_file_name}
+os.makedirs(os.path.join("static", "temp"), exist_ok=True)
 
-@app.get("/v1/api/tts_get/{file_name}")
-def read_item(file_name: str):
-    result_file_path = os.path.join("static", "temp", file_name)
-    return FileResponse(result_file_path)
+
+class SynthesizeRequest(BaseModel):
+    text: str
+    speed: float = 1.0
+
+@app.post("/tts")
+def convert_text_to_speech(request: SynthesizeRequest):
+    # try:
+    preprocessed_text = preprocess_text(request.text)
+
+    output_name = datetime.now().strftime("%Y%m%d_%H%M%S") + ".wav"
+    output_path = os.path.join("static", "temp", output_name)
+
+    model.tts_to_file(preprocessed_text, speaker_ids[SPEAKER], output_path, speed=request.speed)
+
+    return {"message": "Text converted to speech", "output_path": output_path}
+    # except Exception as e:
+    #     raise HTTPException(status_code=500, detail=str(e))
