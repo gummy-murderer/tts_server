@@ -5,8 +5,10 @@
 *.log
 
 # Files
-tts_models--multilingual--multi-dataset--xtts_v2
 static/temp
+resources/MeloTTS_kr
+*.pth
+*.wav
 
 # etc
 __pycache__/
