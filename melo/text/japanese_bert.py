@@ -2,9 +2,11 @@ import torch
 from transformers import AutoTokenizer, AutoModelForMaskedLM
 import sys
 
+from lib.const import KR_MODEL_PATH
 
-models = {}
-tokenizers = {}
+
+models = {KR_MODEL_PATH:AutoModelForMaskedLM.from_pretrained(KR_MODEL_PATH).to('cpu')}
+tokenizers = {KR_MODEL_PATH:AutoTokenizer.from_pretrained(KR_MODEL_PATH)}
 def get_bert_feature(text, word2ph, device=None, model_id='tohoku-nlp/bert-base-japanese-v3'):
     global model
     global tokenizer
@@ -18,9 +20,7 @@ def get_bert_feature(text, word2ph, device=None, model_id='tohoku-nlp/bert-base-
     if not device:
         device = "cuda"
     if model_id not in models:
-        model = AutoModelForMaskedLM.from_pretrained(model_id).to(
-            device
-        )
+        model = AutoModelForMaskedLM.from_pretrained(model_id).to(device)
         models[model_id] = model
         tokenizer = AutoTokenizer.from_pretrained(model_id)
         tokenizers[model_id] = tokenizer

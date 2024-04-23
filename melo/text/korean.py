@@ -90,8 +90,9 @@ def distribute_phone(n_phone, n_word):
 
 
 # tokenizer = AutoTokenizer.from_pretrained('cl-tohoku/bert-base-japanese-v3')
+from lib.const import KR_MODEL_PATH
 
-model_id = 'kykim/bert-kor-base'
+model_id = KR_MODEL_PATH
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 
 def g2p(norm_text):
@@ -138,8 +139,8 @@ def g2p(norm_text):
     assert len(word2ph) == len(tokenized) + 2
     return phones, tones, word2ph
 
+from . import japanese_bert
 def get_bert_feature(text, word2ph, device='cuda'):
-    from . import japanese_bert
     return japanese_bert.get_bert_feature(text, word2ph, device=device, model_id=model_id)
 
 

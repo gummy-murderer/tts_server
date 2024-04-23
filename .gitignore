@@ -6,7 +6,7 @@
 
 # Files
 static/temp
-resources/MeloTTS_kr
+resources/
 *.pth
 *.wav
 
