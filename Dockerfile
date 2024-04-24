@@ -4,7 +4,7 @@ WORKDIR /workspace
     
 COPY . .
 
-RUN pip install torch==2.2.0 torchaudio==2.2.0 --index-url https://download.pytorch.org/whl/cpu
+RUN pip install --upgrade pip
 
 RUN pip install -r requirements.txt
 
