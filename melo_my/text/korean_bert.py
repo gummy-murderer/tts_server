@@ -14,7 +14,6 @@ def get_bert_feature(text, word2ph, device=None):
         for i in inputs:
             inputs[i] = inputs[i].to(device)
         res = model(**inputs, output_hidden_states=True)
-
         res = torch.cat(res["hidden_states"][-3:-2], -1)[0].cpu()
 
     assert inputs["input_ids"].shape[-1] == len(word2ph), f"{inputs['input_ids'].shape[-1]}/{len(word2ph)}"
